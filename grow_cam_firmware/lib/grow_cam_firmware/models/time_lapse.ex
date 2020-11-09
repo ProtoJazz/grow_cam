@@ -1,7 +1,7 @@
 defmodule GrowCamFirmware.TimeLapse do
   use Ecto.Schema
   import Ecto.Changeset
-  schema "time_lapse" do
+  schema "time_lapses" do
     field :start_date, :naive_datetime
     field :end_date, :naive_datetime
     field :folder, :string

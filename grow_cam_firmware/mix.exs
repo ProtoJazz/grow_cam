@@ -37,6 +37,7 @@ defmodule GrowCamFirmware.MixProject do
       {:toolshed, "~> 0.2.13"},
       {:grow_cam_ui, path: "../grow_cam_ui"},
       {:sqlite_ecto2, "~> 2.3"},
+      {:esqlite, "~> 0.4.1"},
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.11.3", targets: @all_targets},
       {:nerves_pack, "~> 0.4.0", targets: @all_targets},

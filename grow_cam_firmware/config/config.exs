@@ -24,7 +24,7 @@ config :grow_cam_ui, GrowCamUiWeb.Endpoint,
   # Use compile-time Mix config instead of runtime environment variables
   load_from_system_env: false,
   # Start the server since we're running in a release instead of through `mix`
-  server: true,
+ # server: true,
   url: [host: "nerves.local", port: 80]
 
 # Customize non-Elixir parts of the firmware. See
