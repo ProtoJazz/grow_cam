@@ -42,7 +42,7 @@ defmodule GrowCamFirmware.Application do
   defp setup_db! do
     repos = Application.get_env(@otp_app, :ecto_repos)
     for repo <- repos do
-      if Application.get_env(@otp_app, repo)[:adapter] == Sqlite.Ecto2 do
+      if Application.get_env(@otp_app, repo)[:adapter] == EctoMnesia.Adapter do
         setup_repo!(repo)
         migrate_repo!(repo)
       end
@@ -51,10 +51,7 @@ defmodule GrowCamFirmware.Application do
   end
 
   defp setup_repo!(repo) do
-    db_file = Application.get_env(@otp_app, repo)[:database]
-    unless File.exists?(db_file) do
-      :ok = repo.__adapter__.storage_up(repo.config)
-    end
+      repo.__adapter__.storage_up(repo.config)
   end
 
   defp migrate_repo!(repo) do

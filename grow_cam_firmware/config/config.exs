@@ -12,8 +12,7 @@ Application.start(:nerves_bootstrap)
 config :grow_cam_firmware, target: Mix.target()
 
 config :grow_cam_firmware, GrowCamFirmware.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "#{Mix.env}.sqlite3"
+  adapter: EctoMnesia.Adapter
 
 config :grow_cam_firmware, ecto_repos: [GrowCamFirmware.Repo]
 
@@ -26,6 +25,10 @@ config :grow_cam_ui, GrowCamUiWeb.Endpoint,
   # Start the server since we're running in a release instead of through `mix`
  # server: true,
   url: [host: "nerves.local", port: 80]
+
+config :ecto_mnesia,
+  host: {:system, :atom, "MNESIA_HOST", Kernel.node()},
+  storage_type: {:system, :atom, "MNESIA_STORAGE_TYPE", :disc_copies}
 
 # Customize non-Elixir parts of the firmware. See
 # https://hexdocs.pm/nerves/advanced-configuration.html for details.
@@ -42,7 +45,7 @@ config :nerves, source_date_epoch: "1604762681"
 # configuring ring_logger.
 
 config :logger, backends: [RingLogger]
-
+config :mnesia, :dir, 'priv/data/mnesia'
 if Mix.target() != :host do
   import_config "target.exs"
 end

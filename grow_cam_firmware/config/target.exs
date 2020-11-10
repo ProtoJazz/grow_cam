@@ -17,7 +17,7 @@ config :nerves_runtime, :kernel, use_system_registry: false
 # Erlinit can be configured without a rootfs_overlay. See
 # https://github.com/nerves-project/erlinit/ for more information on
 # configuring erlinit.
-
+config :mnesia, :dir, '/root/'
 config :nerves,
   erlinit: [
     hostname_pattern: "nerves-%s"
@@ -69,10 +69,6 @@ config :vintage_net,
     },
     ipv4: %{method: :dhcp},},}
   ]
-
-config :grow_cam_firmware, GrowCamFirmware.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "/root/#{Mix.env}.sqlite3"
 
 config :grow_cam_firmware, ecto_repos: [GrowCamFirmware.Repo]
 
