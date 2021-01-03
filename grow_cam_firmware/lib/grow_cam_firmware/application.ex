@@ -16,6 +16,7 @@ defmodule GrowCamFirmware.Application do
         # Children for all targets
         # Starts a worker by calling: GrowCamFirmware.Worker.start_link(arg)
         # {GrowCamFirmware.Worker, arg},
+        GrowCamFirmware.JobScheduler,
         GrowCamFirmware.Repo
       ] ++ children(target())
 

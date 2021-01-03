@@ -46,6 +46,7 @@ config :nerves, source_date_epoch: "1604762681"
 
 config :logger, backends: [RingLogger]
 config :mnesia, :dir, 'priv/data/mnesia'
+
 if Mix.target() != :host do
   import_config "target.exs"
 end
