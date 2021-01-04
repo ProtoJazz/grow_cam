@@ -13,7 +13,7 @@ config :shoehorn,
 # this feature.
 
 config :nerves_runtime, :kernel, use_system_registry: false
-
+config :logger, backends: [RingLogger]
 # Erlinit can be configured without a rootfs_overlay. See
 # https://github.com/nerves-project/erlinit/ for more information on
 # configuring erlinit.
@@ -46,6 +46,16 @@ if keys == [],
 
 config :nerves_ssh,
   authorized_keys: Enum.map(keys, &File.read!/1)
+
+  config :grow_cam_ui, GrowCamUiWeb.Endpoint,
+  # Nerves root filesystem is read-only, so disable the code reloader
+    code_reloader: false,
+    http: [port: 80],
+    # Use compile-time Mix config instead of runtime environment variables
+    load_from_system_env: false,
+    # Start the server since we're running in a release instead of through `mix`
+    server: true,
+    url: [host: "nerves.local", port: 80]
 
 # Configure the network using vintage_net
 # See https://github.com/nerves-networking/vintage_net for more information

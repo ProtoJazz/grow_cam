@@ -10,10 +10,10 @@ defmodule GrowCamUiWeb.PageLive do
 
   def take_and_read_picture() do
     Picam.Camera.start_link
-    IO.puts("link started")
-    Picam.set_size(1000, 0)
-    Picam.set_quality(50)
-    IO.puts("set size")
+   # IO.puts("link started")
+    #Picam.set_size(760, 0)
+   # Picam.set_quality(60)
+   # IO.puts("set size")
     Picam.next_frame
     |> Base.encode64()
   end

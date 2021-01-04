@@ -18,6 +18,9 @@ defmodule GrowCamUiWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/schedule", SchedulePageLive, :index
+    live "/schedule/new", SchedulePageLive, :new
+    live "/schedule/:id", SchedulePageLive, :edit
   end
 
   # Other scopes may use custom stacks.

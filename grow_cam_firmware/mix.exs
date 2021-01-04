@@ -3,7 +3,7 @@ defmodule GrowCamFirmware.MixProject do
 
   @app :grow_cam_firmware
   @version "0.1.0"
-  @all_targets [:rpi, :rpi0, :rpi2, :rpi3, :rpi3a, :rpi4, :bbb, :osd32mp1, :x86_64]
+  @all_targets [:ff_rpi0]
 
   def project do
     [
@@ -42,15 +42,16 @@ defmodule GrowCamFirmware.MixProject do
       {:nerves_pack, "~> 0.4.0", targets: @all_targets},
 
       # Dependencies for specific targets
-      {:nerves_system_rpi, "~> 1.13", runtime: false, targets: :rpi},
-      {:nerves_system_rpi0, "~> 1.13", runtime: false, targets: :rpi0},
-      {:nerves_system_rpi2, "~> 1.13", runtime: false, targets: :rpi2},
-      {:nerves_system_rpi3, "~> 1.13", runtime: false, targets: :rpi3},
-      {:nerves_system_rpi3a, "~> 1.13", runtime: false, targets: :rpi3a},
-      {:nerves_system_rpi4, "~> 1.13", runtime: false, targets: :rpi4},
-      {:nerves_system_bbb, "~> 2.8", runtime: false, targets: :bbb},
-      {:nerves_system_osd32mp1, "~> 0.4", runtime: false, targets: :osd32mp1},
-      {:nerves_system_x86_64, "~> 1.13", runtime: false, targets: :x86_64}
+     # {:nerves_system_rpi, "~> 1.13", runtime: false, targets: :rpi},
+     # {:nerves_system_rpi0, "~> 1.13", runtime: false, targets: :rpi0},
+      {:ffmpeg_nerves_system_rpi0, path: "../../../ffmpeg_nerves_system_rpi0", runtime: false, targets: :ff_rpi0, nerves: [compile: true]},
+     # {:nerves_system_rpi2, "~> 1.13", runtime: false, targets: :rpi2},
+     # {:nerves_system_rpi3, "~> 1.13", runtime: false, targets: :rpi3},
+     # {:nerves_system_rpi3a, "~> 1.13", runtime: false, targets: :rpi3a},
+     # {:nerves_system_rpi4, "~> 1.13", runtime: false, targets: :rpi4},
+     # {:nerves_system_bbb, "~> 2.8", runtime: false, targets: :bbb},
+     # {:nerves_system_osd32mp1, "~> 0.4", runtime: false, targets: :osd32mp1},
+      #{:nerves_system_x86_64, "~> 1.13", runtime: false, targets: :x86_64}
     ]
   end
 

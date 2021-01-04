@@ -21,8 +21,9 @@ defmodule GrowCamFirmware.JobScheduler do
       interval_time = NaiveDateTime.add(time_lapse.last_frame, time_lapse.interval * 3600, :second)
       now = NaiveDateTime.local_now()
       passed_interval = NaiveDateTime.compare(interval_time, now)
+      future_check = NaiveDateTime.compare(time_lapse.last_frame, now)
       IO.puts("CHECKING TIME BOY")
-      if(passed_interval == :lt) do
+      if(passed_interval == :lt or future_check == :gt) do
         Camera.take_photo(time_lapse)
         IO.puts("TOOK PHOTO")
       end

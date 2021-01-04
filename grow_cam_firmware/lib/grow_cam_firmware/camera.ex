@@ -60,6 +60,12 @@ defmodule GrowCamFirmware.Camera do
     |> TimeLapse.changeset(%{frame_count: currentFrame, last_frame: snap_time, active: NaiveDateTime.compare(snap_time, timelapse.end_date) != :gt})
     |> Repo.update()
   end
+
+  def make_movie(timelapse) do
+    IO.puts("TRYING TO MAKE VIDEO IN THE WARM")
+    System.cmd("ffmpeg", ["-framerate", "3", "-i", "#{timelapse.folder}/%d.jpg", "#{timelapse.folder}/output.mp4"], stderr_to_stdout: true)
+    IO.puts("WE MADE VIDEO")
+  end
 end
 
 # GrowCamFirmware.Camera.get_time_lapses
