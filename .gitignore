@@ -1,2 +1,4 @@
 
 grow_cam_firmware/.envrc
+
+grow_cam_firmware/priv/data/mnesia/

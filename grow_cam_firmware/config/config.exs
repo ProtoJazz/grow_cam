@@ -12,20 +12,23 @@ Application.start(:nerves_bootstrap)
 config :grow_cam_firmware, target: Mix.target()
 
 config :grow_cam_firmware, GrowCamFirmware.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "#{Mix.env}.sqlite3"
+  adapter: EctoMnesia.Adapter
 
 config :grow_cam_firmware, ecto_repos: [GrowCamFirmware.Repo]
 
 config :grow_cam_ui, GrowCamUiWeb.Endpoint,
   # Nerves root filesystem is read-only, so disable the code reloader
   code_reloader: false,
-  http: [port: 80],
+  http: [port: 4000],
   # Use compile-time Mix config instead of runtime environment variables
   load_from_system_env: false,
   # Start the server since we're running in a release instead of through `mix`
   server: true,
-  url: [host: "nerves.local", port: 80]
+  url: [host: "nerves.local", port: 4000]
+
+config :ecto_mnesia,
+  host: {:system, :atom, "MNESIA_HOST", Kernel.node()},
+  storage_type: {:system, :atom, "MNESIA_STORAGE_TYPE", :disc_copies}
 
 # Customize non-Elixir parts of the firmware. See
 # https://hexdocs.pm/nerves/advanced-configuration.html for details.
@@ -40,8 +43,11 @@ config :nerves, source_date_epoch: "1604762681"
 # Use Ringlogger as the logger backend and remove :console.
 # See https://hexdocs.pm/ring_logger/readme.html for more information on
 # configuring ring_logger.
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
 
-config :logger, backends: [RingLogger]
+config :mnesia, :dir, 'priv/data/mnesia'
 
 if Mix.target() != :host do
   import_config "target.exs"
