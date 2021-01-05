@@ -3,8 +3,8 @@ defmodule GrowCamUiWeb.SchedulePageLive do
   alias GrowCamFirmware.TimeLapse
   alias GrowCamFirmware.Repo
   alias GrowCamFirmware.Camera
-  @impl true
-  def mount(params, _session, socket) do
+
+  def mount(params, session, socket) do
     timelapses = get_lapses()
 
     id = if(params["id"]) do

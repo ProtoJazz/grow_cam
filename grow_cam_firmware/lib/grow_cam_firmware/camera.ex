@@ -54,6 +54,10 @@ defmodule GrowCamFirmware.Camera do
     |> Repo.delete
   end
 
+  def get_last_updated_timelapse() do
+    Repo.one(from x in TimeLapse, order_by: [desc: x.id], limit: 1)
+  end
+
   def take_photo(timelapse) do
     currentFrame = timelapse.frame_count + 1
     file_path = "#{timelapse.folder}/#{currentFrame}.jpg"
@@ -63,8 +67,8 @@ defmodule GrowCamFirmware.Camera do
     end
 
     {message, status} = System.cmd("raspistill", ["-n", "-q", "75", "-o", file_path], stderr_to_stdout: true)
-    Logger.error(message)
-    Logger.error(status)
+   # Logger.error(message)
+  #  Logger.error(status)
     if(status < 1) do
     snap_time = NaiveDateTime.local_now()
 
@@ -72,7 +76,7 @@ defmodule GrowCamFirmware.Camera do
     |> TimeLapse.changeset(%{frame_count: currentFrame, last_frame: snap_time, active: NaiveDateTime.compare(snap_time, timelapse.end_date) != :gt})
     |> Repo.update()
     else
-      Logger.error(message)
+    #  Logger.error(message)
     end
   end
 
