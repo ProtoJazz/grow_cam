@@ -1,6 +1,11 @@
 /* This file is for your main application css. */
-@import "./phoenix.css";
+//@import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
+@import "../node_modules/bulma/bulma.sass";
+@import "../node_modules/bulma-calendar/dist/css/bulma-calendar.min.css";
+$fa-font-path: "./fontawesome/webfonts";
+@import "./fontawesome/scss/fontawesome";
+@import "./fontawesome/scss/solid";
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,

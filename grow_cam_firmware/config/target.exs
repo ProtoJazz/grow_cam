@@ -14,6 +14,9 @@ config :shoehorn,
 
 config :nerves_runtime, :kernel, use_system_registry: false
 config :logger, backends: [RingLogger]
+config :ring_logger,
+  color: [debug: :yellow],
+  level: :info
 # Erlinit can be configured without a rootfs_overlay. See
 # https://github.com/nerves-project/erlinit/ for more information on
 # configuring erlinit.

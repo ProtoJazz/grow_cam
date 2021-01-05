@@ -9,6 +9,10 @@ defmodule GrowCamFirmware.Camera do
     |> Repo.insert()
   end
 
+  def empty_time_lapse do
+    %TimeLapse{}
+  end
+
   def get_active_time_lapses() do
     IO.puts("Getting lapses")
     TimeLapse
@@ -43,6 +47,17 @@ defmodule GrowCamFirmware.Camera do
     |> Repo.all()
   end
 
+  def delete_timelapse(timelapse) do
+    File.rm_rf(timelapse.folder)
+
+    timelapse
+    |> Repo.delete
+  end
+
+  def get_last_updated_timelapse() do
+    Repo.one(from x in TimeLapse, order_by: [desc: x.id], limit: 1)
+  end
+
   def take_photo(timelapse) do
     currentFrame = timelapse.frame_count + 1
     file_path = "#{timelapse.folder}/#{currentFrame}.jpg"
@@ -51,20 +66,37 @@ defmodule GrowCamFirmware.Camera do
       File.mkdir!(timelapse.folder)
     end
 
-    if Application.get_env(:grow_cam_firmware, :target) != :host do
-      System.cmd("raspistill", ["-n", "-q", "75", "-o", file_path], stderr_to_stdout: true)
-    end
+    {message, status} = System.cmd("raspistill", ["-n", "-q", "75", "-o", file_path], stderr_to_stdout: true)
+   # Logger.error(message)
+  #  Logger.error(status)
+    if(status < 1) do
     snap_time = NaiveDateTime.local_now()
 
     timelapse
     |> TimeLapse.changeset(%{frame_count: currentFrame, last_frame: snap_time, active: NaiveDateTime.compare(snap_time, timelapse.end_date) != :gt})
     |> Repo.update()
+    else
+    #  Logger.error(message)
+    end
   end
 
   def make_movie(timelapse) do
     IO.puts("TRYING TO MAKE VIDEO IN THE WARM")
-    System.cmd("ffmpeg", ["-framerate", "3", "-i", "#{timelapse.folder}/%d.jpg", "#{timelapse.folder}/output.mp4"], stderr_to_stdout: true)
+    filename = "#{:os.system_time()}" <> "output.mp4"
+    System.cmd("ffmpeg", ["-framerate", "3", "-i", "#{timelapse.folder}/%d.jpg", "#{timelapse.folder}/#{filename}"], stderr_to_stdout: true)
     IO.puts("WE MADE VIDEO")
+    set_video_filename(timelapse, filename)
+  end
+
+  def set_video_filename(timelapse, filename) do
+    timelapse
+    |> TimeLapse.changeset(%{video_file: filename})
+    |> Repo.update()
+  end
+
+  def get_time_lapse(id) do
+    TimeLapse
+    |>Repo.get(id)
   end
 end
 

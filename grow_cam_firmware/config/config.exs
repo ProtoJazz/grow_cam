@@ -24,7 +24,7 @@ config :grow_cam_ui, GrowCamUiWeb.Endpoint,
   load_from_system_env: false,
   # Start the server since we're running in a release instead of through `mix`
   server: true,
-  url: [host: "nerves.local", port: 4000]
+  url: [host: nil, port: 4000]
 
 config :ecto_mnesia,
   host: {:system, :atom, "MNESIA_HOST", Kernel.node()},

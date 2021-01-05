@@ -21,6 +21,7 @@ defmodule GrowCamUiWeb.Router do
     live "/schedule", SchedulePageLive, :index
     live "/schedule/new", SchedulePageLive, :new
     live "/schedule/:id", SchedulePageLive, :edit
+    get "/download/video/:id", DownloadController, :video
   end
 
   # Other scopes may use custom stacks.

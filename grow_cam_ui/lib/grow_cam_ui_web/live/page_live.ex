@@ -1,18 +1,33 @@
 defmodule GrowCamUiWeb.PageLive do
   use GrowCamUiWeb, :live_view
-
+  alias GrowCamUi.Helpers
+  alias GrowCamFirmware.Camera
   @impl true
   def mount(_params, _session, socket) do
+    picture =  if Application.get_env(:grow_cam_firmware, :target) != :host do
+      get_latest_picture()
+    else
+      Helpers.monkey
+    end
 
+    {:ok, assign(socket, query: "", results: %{}, image: picture)}
+  end
 
-    {:ok, assign(socket, query: "", results: %{}, image: take_and_read_picture())}
+  def get_latest_picture do
+    timelapse = Camera.get_last_updated_timelapse
+    {status, image} = File.read("#{timelapse.folder}/#{timelapse.frame_count}.jpg")
+    if(status == :ok) do
+      image |> IO.iodata_to_binary |> Base.encode64()
+    else
+      Helpers.monkey
+    end
   end
 
   def take_and_read_picture() do
     Picam.Camera.start_link
    # IO.puts("link started")
     #Picam.set_size(760, 0)
-   # Picam.set_quality(60)
+    Picam.set_quality(60)
    # IO.puts("set size")
     Picam.next_frame
     |> Base.encode64()

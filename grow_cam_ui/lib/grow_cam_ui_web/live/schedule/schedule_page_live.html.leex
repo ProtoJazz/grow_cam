@@ -1,8 +1,8 @@
 <%= if @live_action == :index do %>
 <div>
-<p>Time is now : <%= NaiveDateTime.local_now() %> </p>
+
 <section class="row">
-    <table>
+    <table class="table">
         <thead>
             <tr>
              <th>ID</th>
@@ -13,6 +13,10 @@
              <th>Folder</th>
              <th>Frame Count</th>
              <th>Interval</th>
+             <th>Video Name</th>
+             <th>Edit</th>
+             <th>Download</th>
+             <th>Delete</th>
             </tr>
         </thead>
 
@@ -27,72 +31,25 @@
                 <td><%= timelapse.folder %></td>
                 <td><%= timelapse.frame_count %></td>
                 <td><%= timelapse.interval %></td>
-
+                <td><%= timelapse.video_file %></td>
+                <td><small><a href="/schedule/<%= timelapse.id %>">edit</a></small></td>
+                <td><small><a href="<%= "/download/video/#{timelapse.id }"%>">video</a></small></td>
+                <td><small><a phx-click="delete-timelapse" phx-value-id="<%= timelapse.id %>">delete</a></small></td>
             </tr>
          <% end %>
         </tbody>
     </table>
-
+<p>Time is now : <%= NaiveDateTime.local_now() %> </p>
 </section>
 
 <% end %>
 
 <%= if @live_action == :edit do %>
-
-      <form class="ui form" phx-submit="timelapse-updated">
-          <div class="six wide field">
-            <label>Start Date</label>
-            <input type="text" name="start-date" placeholder="start-date" value="<%= @selected_timelapse.start_date %>">
-          </div>
-
-          <div class="six wide field">
-            <label>End Date</label>
-            <input type="text" name="end-date" placeholder="end-date" value="<%= @selected_timelapse.end_date %>">
-          </div>
-
-          <div class="six wide field">
-            <label>Active</label>
-            <input type="checkbox" name="active" <%= if @selected_timelapse.active do "checked" end %>>
-          </div>
-
-          <div class="six wide field">
-            <label>Folder</label>
-            <input type="text" name="folder" placeholder="folder" value="<%= @selected_timelapse.folder %>">
-          </div>
-
-          <div class="six wide field">
-            <label>Interval</label>
-            <input type="text" name="interval" placeholder="interval" value="<%= @selected_timelapse.interval %>">
-          </div>
-
-          <button type="submit">Save</button>
-      </form>
-      <button type="button" phx-click="make-movie">Make movie</button>
+  <%= live_component(@socket, GrowCamUiWeb.ScheduleFormComponent, selected_timelapse: @selected_timelapse, submit_action: "timelapse-updated", live_action: @live_action) %>
 <% end %>
 
 
 <%= if @live_action == :new do %>
-      <form class="ui form" phx-submit="timelapse-create">
-          <div class="six wide field">
-            <label>Start Date</label>
-            <input type="date" name="start-date" placeholder="start-date" value="">
-          </div>
+<%= live_component(@socket, GrowCamUiWeb.ScheduleFormComponent, selected_timelapse: @empty_timelapse, submit_action: "timelapse-create", live_action: @live_action) %>
 
-          <div class="six wide field">
-            <label>End Date</label>
-            <input type="date" name="end-date" placeholder="end-date" value="">
-          </div>
-
-          <div class="six wide field">
-            <label>Folder</label>
-            <input type="text" name="folder" placeholder="folder" value="">
-          </div>
-
-          <div class="six wide field">
-            <label>Interval</label>
-            <input type="number" name="interval" placeholder="interval" value="">
-          </div>
-
-          <button type="submit">Save</button>
-      </form>
 <% end %>
