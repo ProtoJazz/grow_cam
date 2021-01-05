@@ -1,18 +1,22 @@
 defmodule GrowCamUiWeb.PageLive do
   use GrowCamUiWeb, :live_view
-
+  alias GrowCamUi.Helpers
   @impl true
   def mount(_params, _session, socket) do
+    picture =  if Application.get_env(:grow_cam_firmware, :target) != :host do
+      Helpers.monkey
+    else
+      Helpers.monkey
+    end
 
-
-    {:ok, assign(socket, query: "", results: %{}, image: take_and_read_picture())}
+    {:ok, assign(socket, query: "", results: %{}, image: picture)}
   end
 
   def take_and_read_picture() do
     Picam.Camera.start_link
    # IO.puts("link started")
     #Picam.set_size(760, 0)
-   # Picam.set_quality(60)
+    Picam.set_quality(60)
    # IO.puts("set size")
     Picam.next_frame
     |> Base.encode64()

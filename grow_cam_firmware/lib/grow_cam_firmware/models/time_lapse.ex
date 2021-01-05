@@ -9,14 +9,14 @@ defmodule GrowCamFirmware.TimeLapse do
     field :folder, :string
     field :frame_count, :integer
     field :interval, :integer
-
+    field :video_file, :string
 
   end
 
   @doc false
   def changeset(time_lapse, attrs) do
     time_lapse
-    |> cast(attrs, [:start_date, :end_date, :folder, :frame_count, :interval, :last_frame, :active])
+    |> cast(attrs, [:start_date, :end_date, :folder, :frame_count, :interval, :last_frame, :active, :video_file])
     |> unique_constraint(:folder)
   end
 end

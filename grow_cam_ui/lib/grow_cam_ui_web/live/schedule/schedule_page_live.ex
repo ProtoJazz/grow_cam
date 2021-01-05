@@ -2,10 +2,9 @@ defmodule GrowCamUiWeb.SchedulePageLive do
   use GrowCamUiWeb, :live_view
   alias GrowCamFirmware.TimeLapse
   alias GrowCamFirmware.Repo
-  import Ecto.Query
   alias GrowCamFirmware.Camera
   @impl true
-  def mount(params, session, socket) do
+  def mount(params, _session, socket) do
     timelapses = get_lapses()
 
     id = if(params["id"]) do
@@ -16,7 +15,7 @@ defmodule GrowCamUiWeb.SchedulePageLive do
     end
     selected_timelapse = Enum.find(timelapses, fn l -> l.id == id end )
 
-    {:ok, assign(socket, query: "", results: %{}, timelapses: timelapses, selected_timelapse: selected_timelapse)}
+    {:ok, assign(socket, query: "", results: %{}, timelapses: timelapses, selected_timelapse: selected_timelapse, empty_timelapse: Camera.empty_time_lapse)}
   end
 
   def handle_event("timelapse-updated", params, socket) do
@@ -31,6 +30,7 @@ defmodule GrowCamUiWeb.SchedulePageLive do
 
   def handle_event("timelapse-create", params, socket) do
     now = NaiveDateTime.local_now()
+    IO.inspect(params)
     {_, start_date} = NaiveDateTime.new(Date.from_iso8601!(params["start-date"]), NaiveDateTime.local_now() |> NaiveDateTime.to_time)
     {_, end_date} = NaiveDateTime.new(Date.from_iso8601!(params["end-date"]), NaiveDateTime.local_now() |> NaiveDateTime.to_time)
 
@@ -41,6 +41,18 @@ defmodule GrowCamUiWeb.SchedulePageLive do
     socket = socket
     |> push_redirect(to: "/schedule")
     #{:noreply, socket}
+
+    {:noreply, socket}
+  end
+
+  def handle_event("delete-timelapse", %{"id" => id}, socket) do
+    {parsed_id, _} = Integer.parse(id)
+    timelapse = Camera.get_time_lapse(parsed_id)
+    Camera.delete_timelapse(timelapse)
+
+    socket =
+      socket
+      |> assign(timelapses: get_lapses())
 
     {:noreply, socket}
   end

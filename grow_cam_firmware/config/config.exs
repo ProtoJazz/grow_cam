@@ -18,7 +18,7 @@ config :grow_cam_firmware, ecto_repos: [GrowCamFirmware.Repo]
 
 config :grow_cam_ui, GrowCamUiWeb.Endpoint,
   # Nerves root filesystem is read-only, so disable the code reloader
-  code_reloader: false,
+  code_reloader: true,
   http: [port: 4000],
   # Use compile-time Mix config instead of runtime environment variables
   load_from_system_env: false,
